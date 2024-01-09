@@ -1,12 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Board;
 
-namespace Chess_Console.Board
+namespace Board
 {
-    internal class Position
+    class Position
     {
+        public int Line { get; set; }
+        public int Column { get; set; }
+
+        public Position(int line, int column)
+        {
+            this.Line = line;
+            this.Column = column;
+        }
+
+        public override string ToString()
+        {
+            return Line
+                + ", "
+                + Column;
+        }
     }
 }

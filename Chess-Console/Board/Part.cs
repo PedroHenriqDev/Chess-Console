@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Chess_Console.Board
+﻿namespace Board
 {
-    internal class Part
+    class Part
     {
+        public Position Position { get; set; }
+        public Color ColorPart { get; protected set; }
+        public int AmountMovement { get; protected set; }
+        public ChessBoard ChessBoard { get; protected set; }
+
+        public Part(ChessBoard chessBoard, Color colorPart)
+        {
+            this.Position = null;
+            this.ColorPart = colorPart;
+            this.ChessBoard = chessBoard;
+            this.AmountMovement = 0;
+        }
     }
 }
