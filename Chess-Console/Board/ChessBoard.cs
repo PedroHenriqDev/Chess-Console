@@ -42,7 +42,7 @@ namespace Board
             }
             Parts[pos.Line, pos.Column] = p;
             p.Position = pos;
-        }
+        }   
 
         public bool positionValid(Position pos)
         {
