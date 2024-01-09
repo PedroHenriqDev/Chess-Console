@@ -8,7 +8,7 @@ namespace Board
 {
     class ChessBoard
     {
-        private Part[,] Parts;
+        private Piece[,] Pieces;
         public int Lines { get; set; }
         public int Columns { get; set; }
 
@@ -16,16 +16,16 @@ namespace Board
         {
             Lines = lines;
             Columns = columns;
-            Parts = new Part[Lines, Columns];
+            Pieces = new Piece[Lines, Columns];
         }
 
-        public Part Piece(int line, int column)
+        public Piece Piece(int line, int column)
         {
-            return Parts[line, column];
+            return Pieces[line, column];
         }
-        public Part Piece(Position pos)
+        public Piece Piece(Position pos)
         {
-            return Parts[pos.Line, pos.Column];
+            return Pieces[pos.Line, pos.Column];
         }
 
         public bool existPart(Position pos) 
@@ -34,15 +34,27 @@ namespace Board
             return Piece(pos) != null;
         }
 
-        public void putPart(Part p, Position pos)
+        public void putPart(Piece p, Position pos)
         {
             if (existPart(pos)) 
             {
                 throw new ChessExcepetion("There is a piece in this position!");
             }
-            Parts[pos.Line, pos.Column] = p;
+            Pieces[pos.Line, pos.Column] = p;
             p.Position = pos;
-        }   
+        }
+
+        public Piece removePart(Position pos)
+        {
+            if (Piece(pos) == null) 
+            {
+                return null;
+            }
+            Piece aux = Piece(pos);
+            aux.Position = null;
+            Pieces[pos.Line, pos.Column] = null; 
+            return aux;
+        }
 
         public bool positionValid(Position pos)
         {

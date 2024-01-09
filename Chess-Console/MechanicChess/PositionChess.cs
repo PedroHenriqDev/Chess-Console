@@ -5,20 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Board;
 
-namespace ClassOfParts
+namespace MechanicChess
 {
     class PositionChess
     {
         public char Column { get; set; }
         public int Line { get; set; }
 
-        public PositionChess(char column, int line) 
+        public PositionChess(char column, int line)
         {
-            Line = line;
             Column = column;
+            Line = line;
         }
 
-        public Position ToPosition() 
+        public Position ToPosition()
         {
             return new Position(8 - Line, Column - 'a');
         }

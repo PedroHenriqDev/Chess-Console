@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassOfParts
+namespace MechanicChess
 {
 
-    class Castle : Part
+    class Castle : Piece
     {
         public Castle(ChessBoard chessBoard, Color color) : base(chessBoard, color)
         {

@@ -1,23 +1,30 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Globalization;
-using ClassOfParts;
+using MechanicChess;
 using Board;
 
-namespace Chess 
+namespace Chess_Console 
 {
-    class progam 
+    class Progam
     {
         static void Main(string[] args) 
         {
             try
             {
-                ChessBoard board = new ChessBoard(8, 8);
-                board.putPart(new Castle(board, Color.Black), new Position(1, 2));
-                board.putPart(new Castle(board, Color.Black), new Position(0, 3));
-                board.putPart(new King(board, Color.Black), new Position(1, 3));
-                board.putPart(new Castle(board, Color.White), new Position(3, 5));
-                Screen.PrintChessBoard(board);
+                MatchOfChess match = new MatchOfChess();
+
+                while (!match.Termined) 
+                {
+                    Console.Clear();
+                    Screen.PrintChessBoard(match.Board);
+                    Console.WriteLine();
+                    Console.Write("Origin: ");
+                    Position origin = Screen.ReadPositionChess().ToPosition();
+                    Console.Write("Destiny");
+                    Position destiny = Screen.ReadPositionChess().ToPosition();
+                    match.PerformMoviment(origin, destiny);
+                }
             }
             catch (ChessExcepetion e) 
             {

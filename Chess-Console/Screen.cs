@@ -5,8 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MechanicChess;
 
-namespace Chess
+namespace Chess_Console
 {
     class Screen
     {
@@ -19,7 +20,7 @@ namespace Chess
                 {
                     if (board.Piece(i, j) != null)
                     {
-                        PrintPart(board.Piece(i, j));
+                        PrintPiece(board.Piece(i, j));
                         Console.Write(" ");
                     }
                     else
@@ -32,17 +33,25 @@ namespace Chess
             Console.WriteLine("  A B C D E F G H");
         }
 
-        public static void PrintPart(Part part) 
+        public static PositionChess ReadPositionChess() 
         {
-            if(part.ColorPart == Color.White) 
+            string s = Console.ReadLine();
+            char column = s[0];
+            int line = int.Parse(s[1] + "");
+            return new PositionChess(column, line);
+        }
+
+        public static void PrintPiece(Piece piece) 
+        {
+            if(piece.ColorPart == Color.White) 
             {
-                Console.Write(part);
+                Console.Write(piece);
             }
             else
             {
                 ConsoleColor aux = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(part);
+                Console.Write(piece);
                 Console.ForegroundColor = aux;
             }
         }
