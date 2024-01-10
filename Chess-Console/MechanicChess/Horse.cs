@@ -7,20 +7,18 @@ using System.Threading.Tasks;
 
 namespace MechanicChess
 {
-
-    class King : Piece
+    class Horse : Piece
     {
-        public King(ChessBoard chessBoard, Color color) : base(chessBoard, color)
+        public Horse(ChessBoard chessBoard, Color color) : base(chessBoard, color) 
         {
-
         }
 
         public override string ToString()
         {
-            return "K";
+            return "H";
         }
 
-        private bool CanMove(Position pos) 
+        private bool CanMove(Position pos)
         {
             Piece p = ChessBoard.ReturnPiece(pos);
             return p == null || p.ColorPart != ColorPart;
@@ -31,57 +29,50 @@ namespace MechanicChess
             bool[,] mat = new bool[ChessBoard.Lines, ChessBoard.Columns];
 
             Position pos = new Position(0, 0);
-            //ABOVE
-            pos.SetValues(Position.Line - 1, Position.Column);
-            if(ChessBoard.PositionValid(pos) && CanMove(pos)) 
-            {
-                mat[pos.Line, pos.Column] = true;
-            }
-
-            //NORTHEAST
-            pos.SetValues(Position.Line - 1, Position.Column + 1);
+            
+            pos.SetValues(Position.Line - 1, Position.Column - 2);
             if (ChessBoard.PositionValid(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
 
-            //RIGHT
-            pos.SetValues(Position.Line, Position.Column + 1);
+            pos.SetValues(Position.Line - 2, Position.Column - 1);
             if (ChessBoard.PositionValid(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
 
-            //SOUTHEAST
-            pos.SetValues(Position.Line + 1, Position.Column + 1);
+            pos.SetValues(Position.Line - 2, Position.Column + 1);
             if (ChessBoard.PositionValid(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
 
-            //BELOW
-            pos.SetValues(Position.Line + 1, Position.Column );
-            if (ChessBoard.PositionValid(pos)  && CanMove(pos))
-            {
-                mat[pos.Line, pos.Column] = true;
-            }
-
-            //SOUTH-WEST
-            pos.SetValues(Position.Line + 1, Position.Column - 1);
+            pos.SetValues(Position.Line - 1, Position.Column + 2);
             if (ChessBoard.PositionValid(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
 
-            //LEFT
-            pos.SetValues(Position.Line, Position.Column - 1);
+            pos.SetValues(Position.Line + 1, Position.Column + 2);
             if (ChessBoard.PositionValid(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
 
-            //NORTHWEST
-            pos.SetValues(Position.Line - 1, Position.Column - 1);
+            pos.SetValues(Position.Line + 2, Position.Column + 1);
+            if (ChessBoard.PositionValid(pos) && CanMove(pos))
+            {
+                mat[pos.Line, pos.Column] = true;
+            }
+
+            pos.SetValues(Position.Line + 2, Position.Column - 1);
+            if (ChessBoard.PositionValid(pos) && CanMove(pos))
+            {
+                mat[pos.Line, pos.Column] = true;
+            }
+
+            pos.SetValues(Position.Line + 1, Position.Column - 2);
             if (ChessBoard.PositionValid(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;

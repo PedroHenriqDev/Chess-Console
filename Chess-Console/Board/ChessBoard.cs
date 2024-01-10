@@ -30,7 +30,7 @@ namespace Board
 
         public bool existPiece(Position pos) 
         {
-            validatePosition(pos);
+            ValidatePosition(pos);
             return ReturnPiece(pos) != null;
         }
 
@@ -56,7 +56,7 @@ namespace Board
             return aux;
         }
 
-        public bool positionValid(Position pos)
+        public bool PositionValid(Position pos)
         {
             if (pos.Line < 0 || pos.Line >= Lines || pos.Column < 0 || pos.Column >= Lines)
             {
@@ -65,9 +65,9 @@ namespace Board
             return true;
         }
 
-        public void validatePosition(Position pos) 
+        public void ValidatePosition(Position pos) 
         {
-            if (!positionValid(pos)) 
+            if (!PositionValid(pos)) 
             {
                 throw new ChessExcepetion("Position invalid!");
             }

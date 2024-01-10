@@ -135,12 +135,39 @@ namespace MechanicChess
 
         private void PlacePiece() 
         {
-            PutNewPiece('c', 1, new Castle(ChessBoard, Color.White));
-            PutNewPiece('d', 1, new King(ChessBoard, Color.White));
-            PutNewPiece('h', 7, new Castle(ChessBoard, Color.White));
-  
-            PutNewPiece('a', 8, new King(ChessBoard, Color.Black));
-            PutNewPiece('b', 8, new Castle(ChessBoard, Color.Black));
+            PutNewPiece('a', 1, new Castle(ChessBoard, Color.White));
+            PutNewPiece('b', 1, new Horse(ChessBoard, Color.White));
+            PutNewPiece('c', 1, new Bishop(ChessBoard, Color.White));
+            PutNewPiece('d', 1, new Queen(ChessBoard, Color.White));
+            PutNewPiece('e', 1, new King(ChessBoard, Color.White));
+            PutNewPiece('f', 1, new Bishop(ChessBoard, Color.White));
+            PutNewPiece('g', 1, new Horse(ChessBoard, Color.White));
+            PutNewPiece('h', 1, new Castle(ChessBoard, Color.White));
+            PutNewPiece('a', 2, new Pawn(ChessBoard, Color.White));
+            PutNewPiece('b', 2, new Pawn(ChessBoard, Color.White));
+            PutNewPiece('c', 2, new Pawn(ChessBoard, Color.White));
+            PutNewPiece('d', 2, new Pawn(ChessBoard, Color.White));
+            PutNewPiece('e', 2, new Pawn(ChessBoard, Color.White));
+            PutNewPiece('f', 2, new Pawn(ChessBoard, Color.White));
+            PutNewPiece('g', 2, new Pawn(ChessBoard, Color.White));
+            PutNewPiece('h', 2, new Pawn(ChessBoard, Color.White));
+
+            PutNewPiece('a', 8, new Castle(ChessBoard, Color.Black));
+            PutNewPiece('b', 8, new Horse(ChessBoard, Color.Black));
+            PutNewPiece('c', 8, new Bishop(ChessBoard, Color.Black));
+            PutNewPiece('d', 8, new Queen(ChessBoard, Color.Black));
+            PutNewPiece('e', 8, new King(ChessBoard, Color.Black));
+            PutNewPiece('f', 8, new Bishop(ChessBoard, Color.Black));
+            PutNewPiece('g', 8, new Horse(ChessBoard, Color.Black));
+            PutNewPiece('h', 8, new Castle(ChessBoard, Color.Black));
+            PutNewPiece('a', 7, new Pawn(ChessBoard, Color.Black));
+            PutNewPiece('b', 7, new Pawn(ChessBoard, Color.Black));
+            PutNewPiece('c', 7, new Pawn(ChessBoard, Color.Black));
+            PutNewPiece('d', 7, new Pawn(ChessBoard, Color.Black));
+            PutNewPiece('e', 7, new Pawn(ChessBoard, Color.Black));
+            PutNewPiece('f', 7, new Pawn(ChessBoard, Color.Black));
+            PutNewPiece('g', 7, new Pawn(ChessBoard, Color.Black));
+            PutNewPiece('h', 7, new Pawn(ChessBoard, Color.Black));
         }
 
         public Piece PerformMoviment(Position origin, Position destiny) 

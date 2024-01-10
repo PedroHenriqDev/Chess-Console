@@ -7,19 +7,16 @@ using System.Threading.Tasks;
 
 namespace MechanicChess
 {
-
-    class Castle : Piece
+    class Queen : Piece
     {
-        public Castle(ChessBoard chessBoard, Color color) : base(chessBoard, color)
+        public Queen(ChessBoard chessBoard, Color color) : base(chessBoard, color) 
         {
-
         }
 
         public override string ToString()
         {
-            return "C";
+            return "Q";
         }
-
 
         private bool CanMove(Position pos)
         {
@@ -35,10 +32,10 @@ namespace MechanicChess
 
             //ABOVE
             pos.SetValues(Position.Line - 1, Position.Column);
-            while(ChessBoard.PositionValid(pos) && CanMove(pos)) 
+            while (ChessBoard.PositionValid(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
-                if(ChessBoard.ReturnPiece(pos) != null && ChessBoard.ReturnPiece(pos).ColorPart != ColorPart)
+                if (ChessBoard.ReturnPiece(pos) != null && ChessBoard.ReturnPiece(pos).ColorPart != ColorPart)
                 {
                     break;
                 }
@@ -81,7 +78,57 @@ namespace MechanicChess
                 }
                 pos.Column = pos.Column - 1;
             }
+
+            //NORTHWEST
+            pos.SetValues(Position.Line - 1, Position.Column - 1);
+            while (ChessBoard.PositionValid(pos) && CanMove(pos))
+            {
+                mat[pos.Line, pos.Column] = true;
+                if (ChessBoard.ReturnPiece(pos) != null && ChessBoard.ReturnPiece(pos).ColorPart != ColorPart)
+                {
+                    break;
+                }
+                pos.SetValues(pos.Line - 1, pos.Column - 1);
+            }
+
+
+            //NORTHEAST
+            pos.SetValues(Position.Line - 1, Position.Column + 1);
+            while (ChessBoard.PositionValid(pos) && CanMove(pos))
+            {
+                mat[pos.Line, pos.Column] = true;
+                if (ChessBoard.ReturnPiece(pos) != null && ChessBoard.ReturnPiece(pos).ColorPart != ColorPart)
+                {
+                    break;
+                }
+                pos.SetValues(pos.Line - 1, pos.Column + 1);
+            }
+
+            //SOUTHEAST
+            pos.SetValues(Position.Line + 1, Position.Column + 1);
+            while (ChessBoard.PositionValid(pos) && CanMove(pos))
+            {
+                mat[pos.Line, pos.Column] = true;
+                if (ChessBoard.ReturnPiece(pos) != null && ChessBoard.ReturnPiece(pos).ColorPart != ColorPart)
+                {
+                    break;
+                }
+                pos.SetValues(pos.Line + 1, pos.Column + 1);
+            }
+
+            //SOUTHWEST
+            pos.SetValues(Position.Line + 1, Position.Column - 1);
+            while (ChessBoard.PositionValid(pos) && CanMove(pos))
+            {
+                mat[pos.Line, pos.Column] = true;
+                if (ChessBoard.ReturnPiece(pos) != null && ChessBoard.ReturnPiece(pos).ColorPart != ColorPart)
+                {
+                    break;
+                }
+                pos.SetValues(pos.Line + 1, pos.Column - 1);
+            }
             return mat;
+
         }
     }
 }
