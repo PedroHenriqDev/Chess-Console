@@ -23,6 +23,11 @@ namespace Board
             AmountMovement++;
         }
 
+        public void DecreaseAmountMovement()
+        {
+            AmountMovement--;
+        }
+
         public bool ExistPossibleMovements() 
         {
             bool[,] mat = PossibleMovements();

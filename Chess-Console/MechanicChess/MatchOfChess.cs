@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using Board;
 using Chess_Console;
 
@@ -10,6 +11,7 @@ namespace MechanicChess
         public int Round { get; private set; }
         public Color PlayerCurrent { get; private set; }
         public bool Termined { get; private set; }
+        public bool Check {  get; private set; }
         private HashSet<Piece> _pieces;
         private HashSet<Piece> _captured;
 
@@ -19,6 +21,7 @@ namespace MechanicChess
             Round = 1;
             PlayerCurrent = Color.White;
             Termined = false;
+            Check = false;
             _pieces = new HashSet<Piece>();
             _captured = new HashSet<Piece>();
             PlacePiece();
@@ -40,7 +43,7 @@ namespace MechanicChess
         public HashSet<Piece> PieceInGame(Color color) 
         {
             HashSet<Piece> aux = new HashSet<Piece>();
-            foreach (Piece x in _captured)
+            foreach (Piece x in _pieces)
             {
                 if (x.ColorPart == color)
                 {
@@ -51,10 +54,51 @@ namespace MechanicChess
             return aux;
         }
 
+        private Color Adversary(Color color) 
+        {
+            if(color == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+
+        private Piece SearchKing(Color color) 
+        {
+            foreach(Piece x in PieceInGame(color)) 
+            {
+                if(x is King) 
+                {
+                    return x;
+                }
+            }
+            return null;
+        }
+
+        public bool IsInCheck(Color color) 
+        {
+            Piece king = SearchKing(color);
+            if(king == null) 
+            {
+                throw new ChessExcepetion("There is no color "+  color   + "king on the board!");
+            }
+            foreach(Piece x in PieceInGame(Adversary(color)))
+            {
+                bool[,] mat = x.PossibleMovements();
+                if (mat[king.Position.Line, king.Position.Column])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public void PutNewPiece(char column, int line, Piece piece) 
         {
-            ChessBoard.putPiece(piece, new PositionChess(column, line).ToPosition());
+            ChessBoard.PutPiece(piece, new PositionChess(column, line).ToPosition());
             _pieces.Add(piece);
         }
 
@@ -75,21 +119,48 @@ namespace MechanicChess
             PutNewPiece('d', 8, new King(ChessBoard, Color.Black));
         }
 
-        public void PerformMoviment(Position origin, Position destiny) 
+        public Piece PerformMoviment(Position origin, Position destiny) 
         {
-            Piece p = ChessBoard.removePiece(origin);
+            Piece p = ChessBoard.RemovePiece(origin);
             p.IncreaseAmountMovement();
-            Piece capturedPiece = ChessBoard.removePiece(destiny);
-            ChessBoard.putPiece(p, destiny);
+            Piece capturedPiece = ChessBoard.RemovePiece(destiny);
+            ChessBoard.PutPiece(p, destiny);
             if(capturedPiece != null) 
             {
                 _captured.Add(capturedPiece);
             }
+            return capturedPiece;
+        }
+
+        public void RemoveTheMovement(Position origin, Position destiny, Piece pieceCaptured) 
+        {
+            Piece piece = ChessBoard.RemovePiece(destiny);
+            piece.DecreaseAmountMovement();
+            if(pieceCaptured != null) 
+            {
+                ChessBoard.PutPiece(pieceCaptured, destiny);
+                _captured.Remove(pieceCaptured);
+            }
+            ChessBoard.PutPiece(piece, origin); 
         }
 
         public void MakePlay(Position origin, Position destiny) 
         {
-            PerformMoviment(origin, destiny);
+            Piece pieceCaptured = PerformMoviment(origin, destiny);
+
+            if (IsInCheck(PlayerCurrent)) 
+            {
+                RemoveTheMovement(origin, destiny, pieceCaptured);
+                throw new ChessExcepetion("You can't put it in CHECK!");
+            }
+            if (IsInCheck(Adversary(PlayerCurrent)))
+            {
+                Check = true;
+            }
+            else
+            {
+                Check = false;
+            }
             Round++;
             ChangePlayer();
         }

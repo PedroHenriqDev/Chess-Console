@@ -34,7 +34,7 @@ namespace Board
             return ReturnPiece(pos) != null;
         }
 
-        public void putPiece(Piece p, Position pos)
+        public void PutPiece(Piece p, Position pos)
         {
             if (existPiece(pos)) 
             {
@@ -44,7 +44,7 @@ namespace Board
             p.Position = pos;
         }
 
-        public Piece removePiece(Position pos)
+        public Piece RemovePiece(Position pos)
         {
             if (ReturnPiece(pos) == null) 
             {
