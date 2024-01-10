@@ -28,7 +28,7 @@ namespace Board
             return _pieces[pos.Line, pos.Column];
         }
 
-        public bool existPiece(Position pos) 
+        public bool ExistPiece(Position pos) 
         {
             ValidatePosition(pos);
             return ReturnPiece(pos) != null;
@@ -36,7 +36,7 @@ namespace Board
 
         public void PutPiece(Piece p, Position pos)
         {
-            if (existPiece(pos)) 
+            if (ExistPiece(pos)) 
             {
                 throw new ChessExcepetion("There is a piece in this position!");
             }

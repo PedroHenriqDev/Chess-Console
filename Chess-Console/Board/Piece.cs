@@ -46,7 +46,7 @@ namespace Board
 
         public bool MovementPossible(Position pos) 
         {
-            return PossibleMovements()[pos.Line, pos.Column];
+             return PossibleMovements()[pos.Line, pos.Column];
         }
 
         public abstract bool[,] PossibleMovements();

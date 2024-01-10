@@ -139,7 +139,7 @@ namespace MechanicChess
             PutNewPiece('b', 1, new Horse(ChessBoard, Color.White));
             PutNewPiece('c', 1, new Bishop(ChessBoard, Color.White));
             PutNewPiece('d', 1, new Queen(ChessBoard, Color.White));
-            PutNewPiece('e', 1, new King(ChessBoard, Color.White));
+            PutNewPiece('e', 1, new King(ChessBoard, Color.White, this));
             PutNewPiece('f', 1, new Bishop(ChessBoard, Color.White));
             PutNewPiece('g', 1, new Horse(ChessBoard, Color.White));
             PutNewPiece('h', 1, new Castle(ChessBoard, Color.White));
@@ -156,7 +156,7 @@ namespace MechanicChess
             PutNewPiece('b', 8, new Horse(ChessBoard, Color.Black));
             PutNewPiece('c', 8, new Bishop(ChessBoard, Color.Black));
             PutNewPiece('d', 8, new Queen(ChessBoard, Color.Black));
-            PutNewPiece('e', 8, new King(ChessBoard, Color.Black));
+            PutNewPiece('e', 8, new King(ChessBoard, Color.Black, this));
             PutNewPiece('f', 8, new Bishop(ChessBoard, Color.Black));
             PutNewPiece('g', 8, new Horse(ChessBoard, Color.Black));
             PutNewPiece('h', 8, new Castle(ChessBoard, Color.Black));
@@ -180,6 +180,27 @@ namespace MechanicChess
             {
                 _captured.Add(capturedPiece);
             }
+
+            //SPECIALPLAY KINGSIDE CASTLING
+            if(p is King && destiny.Column == origin.Column + 2)
+            {
+                Position originC = new Position(origin.Line, origin.Column + 3);
+                Position destinyC = new Position(origin.Line, origin.Column + 1);
+                Piece C = ChessBoard.RemovePiece(originC);
+                C.IncreaseAmountMovement();
+                ChessBoard.PutPiece(C, destinyC);
+            }
+
+            //SPECIALPLAY QUEENSIDE CASTLING
+            if (p is King && destiny.Column == origin.Column - 2)
+            {
+                Position originC = new Position(origin.Line, origin.Column - 4);
+                Position destinyC = new Position(origin.Line, origin.Column - 1);
+                Piece C = ChessBoard.RemovePiece(originC);
+                C.IncreaseAmountMovement();
+                ChessBoard.PutPiece(C, destinyC);
+            }
+
             return capturedPiece;
         }
 
@@ -192,7 +213,27 @@ namespace MechanicChess
                 ChessBoard.PutPiece(pieceCaptured, destiny);
                 _captured.Remove(pieceCaptured);
             }
-            ChessBoard.PutPiece(piece, origin); 
+            ChessBoard.PutPiece(piece, origin);
+
+            //SPECIALPLAY KINGSIDE CASTLING
+            if (piece is King && destiny.Column == origin.Column + 2)
+            {
+                Position originC = new Position(origin.Line, origin.Column + 3);
+                Position destinyC = new Position(origin.Line, origin.Column + 1);
+                Piece C = ChessBoard.RemovePiece(destinyC);
+                C.DecreaseAmountMovement();
+                ChessBoard.PutPiece(C, originC);
+            }
+
+            //SPECIALPLAY QUEENSIDE CASTLING
+            if (piece is King && destiny.Column == origin.Column - 2)
+            {
+                Position originC = new Position(origin.Line, origin.Column - 4);
+                Position destinyC = new Position(origin.Line, origin.Column - 1);
+                Piece C = ChessBoard.RemovePiece(originC);
+                C.IncreaseAmountMovement();
+                ChessBoard.PutPiece(C, destinyC);
+            }
         }
 
         public void MakePlay(Position origin, Position destiny)
@@ -237,7 +278,7 @@ namespace MechanicChess
             if (!ChessBoard.ReturnPiece(pos).ExistPossibleMovements()) 
             {
                 throw new ChessExcepetion("There are no movements possible for the origin piece!");
-            }
+            }   
         }
 
         public void ValidedPostitionOfDestiny(Position origin, Position destiny) 

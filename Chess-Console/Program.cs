@@ -40,11 +40,6 @@ namespace Chess_Console
                         Console.WriteLine(e.Message);
                         Console.ReadLine();
                     }
-                    catch(FormatException e) 
-                    {
-                        Console.WriteLine("Incorrect position!");
-                        Console.ReadLine();
-                    }
                 }
                 Console.Clear();
                 Screen.PrintMatch(match);
