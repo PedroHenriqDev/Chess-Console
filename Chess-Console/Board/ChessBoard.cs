@@ -19,11 +19,11 @@ namespace Board
             Pieces = new Piece[Lines, Columns];
         }
 
-        public Piece Piece(int line, int column)
+        public Piece ReturnPiece(int line, int column)
         {
             return Pieces[line, column];
         }
-        public Piece Piece(Position pos)
+        public Piece ReturnPiece(Position pos)
         {
             return Pieces[pos.Line, pos.Column];
         }
@@ -31,7 +31,7 @@ namespace Board
         public bool existPart(Position pos) 
         {
             validatePosition(pos);
-            return Piece(pos) != null;
+            return ReturnPiece(pos) != null;
         }
 
         public void putPart(Piece p, Position pos)
@@ -46,11 +46,11 @@ namespace Board
 
         public Piece removePart(Position pos)
         {
-            if (Piece(pos) == null) 
+            if (ReturnPiece(pos) == null) 
             {
                 return null;
             }
-            Piece aux = Piece(pos);
+            Piece aux = ReturnPiece(pos);
             aux.Position = null;
             Pieces[pos.Line, pos.Column] = null; 
             return aux;

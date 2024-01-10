@@ -1,6 +1,9 @@
-﻿namespace Board
+﻿using MechanicChess;
+using Chess_Console;
+
+namespace Board
 {
-    class Piece
+    abstract class Piece
     {
         public Position Position { get; set; }
         public Color ColorPart { get; protected set; }
@@ -19,5 +22,7 @@
         {
             AmountMovement++;
         }
+
+        public abstract bool[,] PossibleMovements();
     }
 }

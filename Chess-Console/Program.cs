@@ -17,12 +17,21 @@ namespace Chess_Console
                 while (!match.Termined) 
                 {
                     Console.Clear();
-                    Screen.PrintChessBoard(match.Board);
+                    Screen.PrintChessBoard(match.ChessBoard);
                     Console.WriteLine();
+
                     Console.Write("Origin: ");
                     Position origin = Screen.ReadPositionChess().ToPosition();
-                    Console.Write("Destiny");
+
+                    bool[,] possiblePositions = match.ChessBoard.ReturnPiece(origin).PossibleMovements();
+
+                    Console.Clear();
+                    Screen.PrintChessBoard(match.ChessBoard, possiblePositions);
+                    
+                    Console.WriteLine();
+                    Console.Write("Destiny: ");
                     Position destiny = Screen.ReadPositionChess().ToPosition();
+
                     match.PerformMoviment(origin, destiny);
                 }
             }
