@@ -2,15 +2,44 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MechanicChess;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Chess_Console
 {
     class Screen
     {
+        public static void PrintMatch(MatchOfChess match)
+        {
+            Screen.PrintChessBoard(match.ChessBoard);
+            Console.WriteLine();
+            PrintPieceCaptured(match);
+            Console.WriteLine("\nRound: " + match.Round);
+            Console.WriteLine("Waiting for move: " + match.PlayerCurrent);
+        }
+
+        public static void PrintPieceCaptured(MatchOfChess match) 
+        {
+            Console.WriteLine("Captured piece");
+            Console.Write("Whites: ");
+            PrintSet(match.PieceCaptured(Color.White));
+            Console.Write("\nBlacks: ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            PrintSet(match.PieceCaptured(Color.Black));
+            Console.ForegroundColor = aux;
+            Console.WriteLine();
+        }
+
+        public static void PrintSet(HashSet<Piece> set) 
+        {
+            Console.Write("[");
+            foreach(Piece x in set)
+            {
+                Console.Write(x + ", ");
+            }
+            Console.Write("]");
+        }
         public static void PrintChessBoard(ChessBoard chessBoard)
         {
             for (int i = 0; i < chessBoard.Lines; i++)

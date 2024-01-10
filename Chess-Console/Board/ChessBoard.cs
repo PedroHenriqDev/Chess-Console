@@ -8,7 +8,7 @@ namespace Board
 {
     class ChessBoard
     {
-        private Piece[,] Pieces;
+        private Piece[,] _pieces;
         public int Lines { get; set; }
         public int Columns { get; set; }
 
@@ -16,16 +16,16 @@ namespace Board
         {
             Lines = lines;
             Columns = columns;
-            Pieces = new Piece[Lines, Columns];
+            _pieces = new Piece[Lines, Columns];
         }
 
         public Piece ReturnPiece(int line, int column)
         {
-            return Pieces[line, column];
+            return _pieces[line, column];
         }
         public Piece ReturnPiece(Position pos)
         {
-            return Pieces[pos.Line, pos.Column];
+            return _pieces[pos.Line, pos.Column];
         }
 
         public bool existPiece(Position pos) 
@@ -40,7 +40,7 @@ namespace Board
             {
                 throw new ChessExcepetion("There is a piece in this position!");
             }
-            Pieces[pos.Line, pos.Column] = p;
+            _pieces[pos.Line, pos.Column] = p;
             p.Position = pos;
         }
 
@@ -52,7 +52,7 @@ namespace Board
             }
             Piece aux = ReturnPiece(pos);
             aux.Position = null;
-            Pieces[pos.Line, pos.Column] = null; 
+            _pieces[pos.Line, pos.Column] = null; 
             return aux;
         }
 
