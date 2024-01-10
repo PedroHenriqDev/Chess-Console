@@ -12,7 +12,7 @@ namespace MechanicChess
         public int Round { get; private set; }
         public Color PlayerCurrent { get; private set; }
         public bool Termined { get; private set; }
-        public bool Check {  get; private set; }
+        public bool Check { get; private set; }
         public Piece VulnerableEnPassant;
         private HashSet<Piece> _pieces;
         private HashSet<Piece> _captured;
@@ -30,12 +30,12 @@ namespace MechanicChess
             PlacePiece();
         }
 
-        public HashSet<Piece> PieceCaptured(Color color) 
+        public HashSet<Piece> PieceCaptured(Color color)
         {
             HashSet<Piece> aux = new HashSet<Piece>();
-            foreach(Piece x in _captured) 
+            foreach (Piece x in _captured)
             {
-                if(x.ColorPart == color) 
+                if (x.ColorPart == color)
                 {
                     aux.Add(x);
                 }
@@ -43,7 +43,7 @@ namespace MechanicChess
             return aux;
         }
 
-        public HashSet<Piece> PieceInGame(Color color) 
+        public HashSet<Piece> PieceInGame(Color color)
         {
             HashSet<Piece> aux = new HashSet<Piece>();
             foreach (Piece x in _pieces)
@@ -57,9 +57,9 @@ namespace MechanicChess
             return aux;
         }
 
-        private Color Adversary(Color color) 
+        private Color Adversary(Color color)
         {
-            if(color == Color.White)
+            if (color == Color.White)
             {
                 return Color.Black;
             }
@@ -69,11 +69,11 @@ namespace MechanicChess
             }
         }
 
-        private Piece SearchKing(Color color) 
+        private Piece SearchKing(Color color)
         {
-            foreach(Piece x in PieceInGame(color)) 
+            foreach (Piece x in PieceInGame(color))
             {
-                if(x is King) 
+                if (x is King)
                 {
                     return x;
                 }
@@ -81,14 +81,14 @@ namespace MechanicChess
             return null;
         }
 
-        public bool IsInCheck(Color color) 
+        public bool IsInCheck(Color color)
         {
             Piece king = SearchKing(color);
-            if(king == null) 
+            if (king == null)
             {
-                throw new ChessExcepetion("There is no color "+  color   + " king on the board!");
+                throw new ChessExcepetion("There is no color " + color + " king on the board!");
             }
-            foreach(Piece x in PieceInGame(Adversary(color)))
+            foreach (Piece x in PieceInGame(Adversary(color)))
             {
                 bool[,] mat = x.PossibleMovements();
                 if (mat[king.Position.Line, king.Position.Column])
@@ -99,18 +99,18 @@ namespace MechanicChess
             return false;
         }
 
-        public bool TestCheckMate(Color color) 
+        public bool TestCheckMate(Color color)
         {
-            if(!IsInCheck(color)) 
+            if (!IsInCheck(color))
             {
                 return false;
             }
-            foreach(Piece x in PieceInGame(color)) 
+            foreach (Piece x in PieceInGame(color))
             {
                 bool[,] mat = x.PossibleMovements();
-                for(int i = 0; i < ChessBoard.Lines; i++) 
+                for (int i = 0; i < ChessBoard.Lines; i++)
                 {
-                    for(int j = 0; j < ChessBoard.Columns; j++) 
+                    for (int j = 0; j < ChessBoard.Columns; j++)
                     {
                         if (mat[i, j])
                         {
@@ -130,13 +130,13 @@ namespace MechanicChess
             return true;
         }
 
-        public void PutNewPiece(char column, int line, Piece piece) 
+        public void PutNewPiece(char column, int line, Piece piece)
         {
             ChessBoard.PutPiece(piece, new PositionChess(column, line).ToPosition());
             _pieces.Add(piece);
         }
 
-        private void PlacePiece() 
+        private void PlacePiece()
         {
             PutNewPiece('a', 1, new Castle(ChessBoard, Color.White));
             PutNewPiece('b', 1, new Horse(ChessBoard, Color.White));
@@ -173,19 +173,19 @@ namespace MechanicChess
             PutNewPiece('h', 7, new Pawn(ChessBoard, Color.Black, this));
         }
 
-        public Piece PerformMoviment(Position origin, Position destiny) 
+        public Piece PerformMoviment(Position origin, Position destiny)
         {
             Piece p = ChessBoard.RemovePiece(origin);
             p.IncreaseAmountMovement();
             Piece capturedPiece = ChessBoard.RemovePiece(destiny);
             ChessBoard.PutPiece(p, destiny);
-            if(capturedPiece != null) 
+            if (capturedPiece != null)
             {
                 _captured.Add(capturedPiece);
             }
 
             //SPECIALPLAY KINGSIDE CASTLING
-            if(p is King && destiny.Column == origin.Column + 2)
+            if (p is King && destiny.Column == origin.Column + 2)
             {
                 Position originC = new Position(origin.Line, origin.Column + 3);
                 Position destinyC = new Position(origin.Line, origin.Column + 1);
@@ -205,12 +205,12 @@ namespace MechanicChess
             }
 
             //SPECIAYPLAT EN PASSANT
-            if(p is Pawn)
+            if (p is Pawn)
             {
-                if(origin.Column != destiny.Column && capturedPiece == null) 
+                if (origin.Column != destiny.Column && capturedPiece == null)
                 {
                     Position posP;
-                    if(p.ColorPart == Color.White)
+                    if (p.ColorPart == Color.White)
                     {
                         posP = new Position(destiny.Line + 1, destiny.Column);
                     }
@@ -226,11 +226,11 @@ namespace MechanicChess
             return capturedPiece;
         }
 
-        public void RemoveTheMovement(Position origin, Position destiny, Piece pieceCaptured) 
+        public void RemoveTheMovement(Position origin, Position destiny, Piece pieceCaptured)
         {
             Piece p = ChessBoard.RemovePiece(destiny);
             p.DecreaseAmountMovement();
-            if(pieceCaptured != null) 
+            if (pieceCaptured != null)
             {
                 ChessBoard.PutPiece(pieceCaptured, destiny);
                 _captured.Remove(pieceCaptured);
@@ -258,17 +258,17 @@ namespace MechanicChess
             }
 
             //SPECIALPLAY EN PASSANT
-            if(p is Pawn) 
+            if (p is Pawn)
             {
-                if(origin.Column != destiny.Column && pieceCaptured == VulnerableEnPassant) 
+                if (origin.Column != destiny.Column && pieceCaptured == VulnerableEnPassant)
                 {
                     Piece pawn = ChessBoard.RemovePiece(destiny);
                     Position posP;
-                    if(p.ColorPart == Color.White) 
+                    if (p.ColorPart == Color.White)
                     {
                         posP = new Position(3, destiny.Column);
                     }
-                    else 
+                    else
                     {
                         posP = new Position(4, destiny.Column);
                     }
@@ -280,12 +280,27 @@ namespace MechanicChess
         public void MakePlay(Position origin, Position destiny)
         {
             Piece pieceCaptured = PerformMoviment(origin, destiny);
+            Piece p = ChessBoard.ReturnPiece(destiny);
 
             if (IsInCheck(PlayerCurrent))
             {
                 RemoveTheMovement(origin, destiny, pieceCaptured);
                 throw new ChessExcepetion("You can't put it in CHECK!");
             }
+
+            //SPECIALPLAY PROMOTION
+            if (p is Pawn)
+            {
+                if (p.ColorPart == Color.White && destiny.Line == 0 || (p.ColorPart == Color.Black && destiny.Line == 7))
+                {
+                    p = ChessBoard.RemovePiece(destiny);
+                    _pieces.Remove(p);
+                    Piece quenn = new Queen(ChessBoard, p.ColorPart);
+                    ChessBoard.PutPiece(quenn, destiny);
+                    _pieces.Add(quenn);
+                }
+            }
+
             if (IsInCheck(Adversary(PlayerCurrent)))
             {
                 Check = true;
@@ -305,45 +320,44 @@ namespace MechanicChess
                 ChangePlayer();
             }
 
-            Piece p = ChessBoard.ReturnPiece(destiny);
             //#SPECIALPLAY EN PASSANT
-            if (p is Pawn && (destiny.Line == origin.Line - 2 || destiny.Line == origin.Line + 2)) 
+            if (p is Pawn && (destiny.Line == origin.Line - 2 || destiny.Line == origin.Line + 2))
             {
                 VulnerableEnPassant = p;
             }
-            else 
+            else
             {
                 VulnerableEnPassant = null;
             }
         }
 
-        public void ValidedPositionOfOrigin(Position pos) 
+        public void ValidedPositionOfOrigin(Position pos)
         {
-            if(ChessBoard.ReturnPiece(pos) == null) 
+            if (ChessBoard.ReturnPiece(pos) == null)
             {
                 throw new ChessExcepetion("There is no piece in the chosen origin position!");
             }
-            if(PlayerCurrent != ChessBoard.ReturnPiece(pos).ColorPart) 
+            if (PlayerCurrent != ChessBoard.ReturnPiece(pos).ColorPart)
             {
                 throw new ChessExcepetion("The origin piece chosen is not yours!");
             }
-            if (!ChessBoard.ReturnPiece(pos).ExistPossibleMovements()) 
+            if (!ChessBoard.ReturnPiece(pos).ExistPossibleMovements())
             {
                 throw new ChessExcepetion("There are no movements possible for the origin piece!");
-            }   
+            }
         }
 
-        public void ValidedPostitionOfDestiny(Position origin, Position destiny) 
+        public void ValidedPostitionOfDestiny(Position origin, Position destiny)
         {
-            if (!ChessBoard.ReturnPiece(origin).MovementPossible(destiny)) 
+            if (!ChessBoard.ReturnPiece(origin).MovementPossible(destiny))
             {
                 throw new ChessExcepetion("Invalid destination position!");
             }
         }
 
-        private void ChangePlayer() 
+        private void ChangePlayer()
         {
-            if(PlayerCurrent == Color.White)
+            if (PlayerCurrent == Color.White)
             {
                 PlayerCurrent = Color.Black;
             }

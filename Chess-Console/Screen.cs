@@ -31,7 +31,7 @@ namespace Chess_Console
 
         public static void PrintPieceCaptured(MatchOfChess match) 
         {
-            Console.WriteLine("Captured piece");
+            Console.WriteLine("Captured piece: ");
             Console.Write("Whites: ");
             PrintSet(match.PieceCaptured(Color.White));
             Console.Write("\nBlacks: ");
