@@ -215,7 +215,7 @@ namespace MechanicChess
 
         public void ValidedPostitionOfDestiny(Position origin, Position destiny) 
         {
-            if (!ChessBoard.ReturnPiece(origin).CanMoveTo(destiny)) 
+            if (!ChessBoard.ReturnPiece(origin).MovementPossible(destiny)) 
             {
                 throw new ChessExcepetion("Invalid destination position!");
             }

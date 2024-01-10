@@ -44,7 +44,7 @@ namespace Board
             return false;
         }
 
-        public bool CanMoveTo(Position pos) 
+        public bool MovementPossible(Position pos) 
         {
             return PossibleMovements()[pos.Line, pos.Column];
         }

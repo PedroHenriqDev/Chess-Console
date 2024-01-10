@@ -25,7 +25,7 @@ namespace Chess_Console
             else
             {
                 Console.WriteLine("CHECK-MATE!");
-                Console.Write("Winner: " + match.PlayerCurrent);
+                Console.WriteLine("Winner: " + match.PlayerCurrent);
             }
         }
 
