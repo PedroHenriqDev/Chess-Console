@@ -15,10 +15,17 @@ namespace Chess_Console
             Console.WriteLine();
             PrintPieceCaptured(match);
             Console.WriteLine("\nRound: " + match.Round);
-            Console.WriteLine("Waiting for move: " + match.PlayerCurrent);
-            if (match.Check)
+            if (!match.Termined) {
+                Console.WriteLine("Waiting for move: " + match.PlayerCurrent);
+                if (match.Check)
+                {
+                    Console.WriteLine("CHECK!");
+                }
+            }
+            else
             {
-                Console.WriteLine("CHECK!");
+                Console.WriteLine("CHECK-MATE!");
+                Console.Write("Winner: " + match.PlayerCurrent);
             }
         }
 

@@ -83,7 +83,7 @@ namespace MechanicChess
             Piece king = SearchKing(color);
             if(king == null) 
             {
-                throw new ChessExcepetion("There is no color "+  color   + "king on the board!");
+                throw new ChessExcepetion("There is no color "+  color   + " king on the board!");
             }
             foreach(Piece x in PieceInGame(Adversary(color)))
             {
@@ -96,6 +96,37 @@ namespace MechanicChess
             return false;
         }
 
+        public bool TestCheckMate(Color color) 
+        {
+            if(!IsInCheck(color)) 
+            {
+                return false;
+            }
+            foreach(Piece x in PieceInGame(color)) 
+            {
+                bool[,] mat = x.PossibleMovements();
+                for(int i = 0; i < ChessBoard.Lines; i++) 
+                {
+                    for(int j = 0; j < ChessBoard.Columns; j++) 
+                    {
+                        if (mat[i, j])
+                        {
+                            Position origin = x.Position;
+                            Position destiny = new Position(i, j);
+                            Piece pieceCaptured = PerformMoviment(origin, destiny);
+                            bool testCheck = IsInCheck(color);
+                            RemoveTheMovement(origin, destiny, pieceCaptured);
+                            if (!testCheck)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         public void PutNewPiece(char column, int line, Piece piece) 
         {
             ChessBoard.PutPiece(piece, new PositionChess(column, line).ToPosition());
@@ -105,18 +136,11 @@ namespace MechanicChess
         private void PlacePiece() 
         {
             PutNewPiece('c', 1, new Castle(ChessBoard, Color.White));
-            PutNewPiece('c', 2, new Castle(ChessBoard, Color.White));
-            PutNewPiece('d', 2, new Castle(ChessBoard, Color.White));
-            PutNewPiece('e', 2, new Castle(ChessBoard, Color.White));
-            PutNewPiece('e', 1, new Castle(ChessBoard, Color.White));
             PutNewPiece('d', 1, new King(ChessBoard, Color.White));
-
-            PutNewPiece('c', 7, new Castle(ChessBoard, Color.Black));
-            PutNewPiece('c', 8, new Castle(ChessBoard, Color.Black));
-            PutNewPiece('d', 7, new Castle(ChessBoard, Color.Black));
-            PutNewPiece('e', 7, new Castle(ChessBoard, Color.Black));
-            PutNewPiece('e', 8, new Castle(ChessBoard, Color.Black));
-            PutNewPiece('d', 8, new King(ChessBoard, Color.Black));
+            PutNewPiece('h', 7, new Castle(ChessBoard, Color.White));
+  
+            PutNewPiece('a', 8, new King(ChessBoard, Color.Black));
+            PutNewPiece('b', 8, new Castle(ChessBoard, Color.Black));
         }
 
         public Piece PerformMoviment(Position origin, Position destiny) 
@@ -144,11 +168,11 @@ namespace MechanicChess
             ChessBoard.PutPiece(piece, origin); 
         }
 
-        public void MakePlay(Position origin, Position destiny) 
+        public void MakePlay(Position origin, Position destiny)
         {
             Piece pieceCaptured = PerformMoviment(origin, destiny);
 
-            if (IsInCheck(PlayerCurrent)) 
+            if (IsInCheck(PlayerCurrent))
             {
                 RemoveTheMovement(origin, destiny, pieceCaptured);
                 throw new ChessExcepetion("You can't put it in CHECK!");
@@ -161,8 +185,16 @@ namespace MechanicChess
             {
                 Check = false;
             }
-            Round++;
-            ChangePlayer();
+
+            if (TestCheckMate(Adversary(PlayerCurrent)))
+            {
+                Termined = true;
+            }
+            else
+            {
+                Round++;
+                ChangePlayer();
+            }
         }
 
         public void ValidedPositionOfOrigin(Position pos) 

@@ -34,15 +34,18 @@ namespace Chess_Console
                         Position destiny = Screen.ReadPositionChess().ToPosition();
                         match.ValidedPostitionOfDestiny(origin, destiny);
                         match.MakePlay(origin, destiny);
-                    } 
+                    }
                     catch (ChessExcepetion e)
                     {
                         Console.WriteLine(e.Message);
                         Console.ReadLine();
                     }
                 }
+                Console.Clear();
+                Screen.PrintMatch(match);
+                Console.ReadLine();
             }
-            catch (ChessExcepetion e) 
+            catch (ChessExcepetion e)
             {
                 Console.WriteLine(e.Message);
             }
