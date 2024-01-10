@@ -11,11 +11,11 @@ namespace MechanicChess
 
     class King : Piece
     {
-        private MatchOfChess Match;
+        private MatchOfChess _match;
 
         public King(ChessBoard chessBoard, Color color, MatchOfChess match) : base(chessBoard, color)
         {
-            Match = match;
+            _match = match;
         }
 
         public override string ToString()
@@ -97,7 +97,7 @@ namespace MechanicChess
             }
 
              //#SPECIALPLAY CASTLING
-            if(AmountMovement == 0 && !Match.Check) 
+            if(AmountMovement == 0 && !_match.Check) 
             {
                 //#SPECIALPLAY KINGSIDE CASTLING
                 Position posC1 = new Position(Position.Line, Position.Column + 3);

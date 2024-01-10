@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using Board;
 using Chess_Console;
@@ -12,6 +13,7 @@ namespace MechanicChess
         public Color PlayerCurrent { get; private set; }
         public bool Termined { get; private set; }
         public bool Check {  get; private set; }
+        public Piece VulnerableEnPassant;
         private HashSet<Piece> _pieces;
         private HashSet<Piece> _captured;
 
@@ -22,6 +24,7 @@ namespace MechanicChess
             PlayerCurrent = Color.White;
             Termined = false;
             Check = false;
+            VulnerableEnPassant = null;
             _pieces = new HashSet<Piece>();
             _captured = new HashSet<Piece>();
             PlacePiece();
@@ -143,14 +146,14 @@ namespace MechanicChess
             PutNewPiece('f', 1, new Bishop(ChessBoard, Color.White));
             PutNewPiece('g', 1, new Horse(ChessBoard, Color.White));
             PutNewPiece('h', 1, new Castle(ChessBoard, Color.White));
-            PutNewPiece('a', 2, new Pawn(ChessBoard, Color.White));
-            PutNewPiece('b', 2, new Pawn(ChessBoard, Color.White));
-            PutNewPiece('c', 2, new Pawn(ChessBoard, Color.White));
-            PutNewPiece('d', 2, new Pawn(ChessBoard, Color.White));
-            PutNewPiece('e', 2, new Pawn(ChessBoard, Color.White));
-            PutNewPiece('f', 2, new Pawn(ChessBoard, Color.White));
-            PutNewPiece('g', 2, new Pawn(ChessBoard, Color.White));
-            PutNewPiece('h', 2, new Pawn(ChessBoard, Color.White));
+            PutNewPiece('a', 2, new Pawn(ChessBoard, Color.White, this));
+            PutNewPiece('b', 2, new Pawn(ChessBoard, Color.White, this));
+            PutNewPiece('c', 2, new Pawn(ChessBoard, Color.White, this));
+            PutNewPiece('d', 2, new Pawn(ChessBoard, Color.White, this));
+            PutNewPiece('e', 2, new Pawn(ChessBoard, Color.White, this));
+            PutNewPiece('f', 2, new Pawn(ChessBoard, Color.White, this));
+            PutNewPiece('g', 2, new Pawn(ChessBoard, Color.White, this));
+            PutNewPiece('h', 2, new Pawn(ChessBoard, Color.White, this));
 
             PutNewPiece('a', 8, new Castle(ChessBoard, Color.Black));
             PutNewPiece('b', 8, new Horse(ChessBoard, Color.Black));
@@ -160,14 +163,14 @@ namespace MechanicChess
             PutNewPiece('f', 8, new Bishop(ChessBoard, Color.Black));
             PutNewPiece('g', 8, new Horse(ChessBoard, Color.Black));
             PutNewPiece('h', 8, new Castle(ChessBoard, Color.Black));
-            PutNewPiece('a', 7, new Pawn(ChessBoard, Color.Black));
-            PutNewPiece('b', 7, new Pawn(ChessBoard, Color.Black));
-            PutNewPiece('c', 7, new Pawn(ChessBoard, Color.Black));
-            PutNewPiece('d', 7, new Pawn(ChessBoard, Color.Black));
-            PutNewPiece('e', 7, new Pawn(ChessBoard, Color.Black));
-            PutNewPiece('f', 7, new Pawn(ChessBoard, Color.Black));
-            PutNewPiece('g', 7, new Pawn(ChessBoard, Color.Black));
-            PutNewPiece('h', 7, new Pawn(ChessBoard, Color.Black));
+            PutNewPiece('a', 7, new Pawn(ChessBoard, Color.Black, this));
+            PutNewPiece('b', 7, new Pawn(ChessBoard, Color.Black, this));
+            PutNewPiece('c', 7, new Pawn(ChessBoard, Color.Black, this));
+            PutNewPiece('d', 7, new Pawn(ChessBoard, Color.Black, this));
+            PutNewPiece('e', 7, new Pawn(ChessBoard, Color.Black, this));
+            PutNewPiece('f', 7, new Pawn(ChessBoard, Color.Black, this));
+            PutNewPiece('g', 7, new Pawn(ChessBoard, Color.Black, this));
+            PutNewPiece('h', 7, new Pawn(ChessBoard, Color.Black, this));
         }
 
         public Piece PerformMoviment(Position origin, Position destiny) 
@@ -201,22 +204,41 @@ namespace MechanicChess
                 ChessBoard.PutPiece(C, destinyC);
             }
 
+            //SPECIAYPLAT EN PASSANT
+            if(p is Pawn)
+            {
+                if(origin.Column != destiny.Column && capturedPiece == null) 
+                {
+                    Position posP;
+                    if(p.ColorPart == Color.White)
+                    {
+                        posP = new Position(destiny.Line + 1, destiny.Column);
+                    }
+                    else
+                    {
+                        posP = new Position(destiny.Line - 1, destiny.Column);
+                    }
+                    capturedPiece = ChessBoard.RemovePiece(posP);
+                    _captured.Add(capturedPiece);
+                }
+            }
+
             return capturedPiece;
         }
 
         public void RemoveTheMovement(Position origin, Position destiny, Piece pieceCaptured) 
         {
-            Piece piece = ChessBoard.RemovePiece(destiny);
-            piece.DecreaseAmountMovement();
+            Piece p = ChessBoard.RemovePiece(destiny);
+            p.DecreaseAmountMovement();
             if(pieceCaptured != null) 
             {
                 ChessBoard.PutPiece(pieceCaptured, destiny);
                 _captured.Remove(pieceCaptured);
             }
-            ChessBoard.PutPiece(piece, origin);
+            ChessBoard.PutPiece(p, origin);
 
             //SPECIALPLAY KINGSIDE CASTLING
-            if (piece is King && destiny.Column == origin.Column + 2)
+            if (p is King && destiny.Column == origin.Column + 2)
             {
                 Position originC = new Position(origin.Line, origin.Column + 3);
                 Position destinyC = new Position(origin.Line, origin.Column + 1);
@@ -226,13 +248,32 @@ namespace MechanicChess
             }
 
             //SPECIALPLAY QUEENSIDE CASTLING
-            if (piece is King && destiny.Column == origin.Column - 2)
+            if (p is King && destiny.Column == origin.Column - 2)
             {
                 Position originC = new Position(origin.Line, origin.Column - 4);
                 Position destinyC = new Position(origin.Line, origin.Column - 1);
                 Piece C = ChessBoard.RemovePiece(originC);
                 C.IncreaseAmountMovement();
                 ChessBoard.PutPiece(C, destinyC);
+            }
+
+            //SPECIALPLAY EN PASSANT
+            if(p is Pawn) 
+            {
+                if(origin.Column != destiny.Column && pieceCaptured == VulnerableEnPassant) 
+                {
+                    Piece pawn = ChessBoard.RemovePiece(destiny);
+                    Position posP;
+                    if(p.ColorPart == Color.White) 
+                    {
+                        posP = new Position(3, destiny.Column);
+                    }
+                    else 
+                    {
+                        posP = new Position(4, destiny.Column);
+                    }
+                    ChessBoard.PutPiece(pawn, posP);
+                }
             }
         }
 
@@ -262,6 +303,17 @@ namespace MechanicChess
             {
                 Round++;
                 ChangePlayer();
+            }
+
+            Piece p = ChessBoard.ReturnPiece(destiny);
+            //#SPECIALPLAY EN PASSANT
+            if (p is Pawn && (destiny.Line == origin.Line - 2 || destiny.Line == origin.Line + 2)) 
+            {
+                VulnerableEnPassant = p;
+            }
+            else 
+            {
+                VulnerableEnPassant = null;
             }
         }
 
