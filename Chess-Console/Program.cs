@@ -16,23 +16,34 @@ namespace Chess_Console
 
                 while (!match.Termined) 
                 {
-                    Console.Clear();
-                    Screen.PrintChessBoard(match.ChessBoard);
-                    Console.WriteLine();
+                    try
+                    {
+                        Console.Clear();
+                        Screen.PrintChessBoard(match.ChessBoard);
+                        Console.WriteLine();
+                        Console.WriteLine("Round: " + match.Round);
+                        Console.WriteLine("Waiting for move: " + match.PlayerCurrent);
 
-                    Console.Write("Origin: ");
-                    Position origin = Screen.ReadPositionChess().ToPosition();
+                        Console.Write("\nOrigin: ");
+                        Position origin = Screen.ReadPositionChess().ToPosition();
+                        match.ValidedPositionOfOrigin(origin);
 
-                    bool[,] possiblePositions = match.ChessBoard.ReturnPiece(origin).PossibleMovements();
+                        bool[,] possiblePositions = match.ChessBoard.ReturnPiece(origin).PossibleMovements();
 
-                    Console.Clear();
-                    Screen.PrintChessBoard(match.ChessBoard, possiblePositions);
-                    
-                    Console.WriteLine();
-                    Console.Write("Destiny: ");
-                    Position destiny = Screen.ReadPositionChess().ToPosition();
+                        Console.Clear();
+                        Screen.PrintChessBoard(match.ChessBoard, possiblePositions);
 
-                    match.PerformMoviment(origin, destiny);
+                        Console.WriteLine();
+                        Console.Write("\nDestiny: ");
+                        Position destiny = Screen.ReadPositionChess().ToPosition();
+                        match.ValidedPostitionOfDestiny(origin, destiny);
+                        match.MakePlay(origin, destiny);
+                    } 
+                    catch (ChessExcepetion e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
                 }
             }
             catch (ChessExcepetion e) 

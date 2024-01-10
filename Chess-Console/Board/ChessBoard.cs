@@ -28,15 +28,15 @@ namespace Board
             return Pieces[pos.Line, pos.Column];
         }
 
-        public bool existPart(Position pos) 
+        public bool existPiece(Position pos) 
         {
             validatePosition(pos);
             return ReturnPiece(pos) != null;
         }
 
-        public void putPart(Piece p, Position pos)
+        public void putPiece(Piece p, Position pos)
         {
-            if (existPart(pos)) 
+            if (existPiece(pos)) 
             {
                 throw new ChessExcepetion("There is a piece in this position!");
             }
@@ -44,7 +44,7 @@ namespace Board
             p.Position = pos;
         }
 
-        public Piece removePart(Position pos)
+        public Piece removePiece(Position pos)
         {
             if (ReturnPiece(pos) == null) 
             {
